@@ -1,0 +1,1 @@
+- [Source-faithful recreation](source-faithful-recreation.md) — preserve supplied section order and proportions before adding visual polish.

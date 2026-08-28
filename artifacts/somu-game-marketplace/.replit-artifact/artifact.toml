@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "GAME MARKETPLACE"
+description = "A nostalgic crypto game marketplace for SOMU GAME on Robinhood Chain, featuring Escape Road, Stick Hero, Drift Hunters, Gorillas, and The Cube with direct playable game experiences."
+version = "1.0.0"
+id = "artifacts/somu-game-marketplace"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22236
+
+[services.development]
+run = "pnpm --filter @workspace/somu-game-marketplace run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/somu-game-marketplace", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/somu-game-marketplace/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22236"
+BASE_PATH = "/"
