@@ -126,8 +126,9 @@
 .game-card:hover { transform: translateY(-8px) rotate(-1deg); border-color: #c6ff33; box-shadow: 7px 7px 0 rgba(198,255,51,.9); }
 .game-card:hover .game-cover img { transform: scale(1.06) rotate(2deg); }
 .game-cover img { transition: transform .5s ease; }
+.coming-soon-cover { background: #111; }
+.coming-soon-cover::before { opacity: .3; }
 .game-iframe { width: 100%; height: 100%; border: 0; background: #000; }
 @media (max-width: 844px) {
   .desktop-nav { display: none; }
-  .orbit-stage { min-height: 390px; transform: scale(.82); transform-origin: center; margin: -30px 0; }
 }
