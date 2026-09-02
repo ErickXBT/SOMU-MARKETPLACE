@@ -9,7 +9,7 @@ router = "path"
 [[services]]
 name = "web"
 paths = [ "/" ]
-localPort = 22236
+localPort = 5000
 
 [services.development]
 run = "pnpm --filter @workspace/somu-game-marketplace run dev"
@@ -24,5 +24,5 @@ from = "/*"
 to = "/index.html"
 
 [services.env]
-PORT = "22236"
+PORT = "5000"
 BASE_PATH = "/"

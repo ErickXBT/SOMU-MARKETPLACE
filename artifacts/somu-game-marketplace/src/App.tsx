@@ -16,6 +16,7 @@ type Game = {
   cover: string;
   description: string;
   source?: string;
+  playUrl?: string;
 };
 
 const games: Game[] = [
@@ -23,7 +24,7 @@ const games: Game[] = [
   { slug: 'stick-hero', name: 'Stick Hero', category: 'Arcade', cover: '/game-covers/stick-hero.png', source: stickHeroSource, description: 'Stretch the stick, cross every gap, and keep your hero standing.' },
   { slug: 'drift-hunters', name: 'Drift Hunters', category: 'Racing', cover: '/game-covers/drift-hunters.png', source: driftHuntersSource, description: 'Tune your car, take the corner sideways, and chase the perfect drift.' },
   { slug: 'gorillas', name: 'Gorillas', category: 'Strategy', cover: '/game-covers/gorillas.png', source: gorillasSource, description: 'Aim the bomb, read the wind, and outsmart your opponent.' },
-  { slug: 'the-cube', name: 'The Cube', category: 'Puzzle', cover: '/game-covers/the-cube.png', source: cubeSource, description: 'Solve the cube, match every face, and beat the clock.' },
+  { slug: 'the-cube', name: 'The Cube', category: 'Puzzle', cover: '/game-covers/the-cube.png', source: cubeSource, playUrl: 'https://bsehovac.github.io/the-cube/', description: 'Solve the cube, match every face, and beat the clock.' },
   { slug: 'coming-soon-1', name: 'Coming Soon', category: 'Coming Soon', cover: '', description: 'A new Somu Game is being prepared for the arcade.' },
   { slug: 'coming-soon-2', name: 'Coming Soon', category: 'Coming Soon', cover: '', description: 'A new Somu Game is being prepared for the arcade.' },
   { slug: 'coming-soon-3', name: 'Coming Soon', category: 'Coming Soon', cover: '', description: 'A new Somu Game is being prepared for the arcade.' },
@@ -44,7 +45,12 @@ function sourceToDocument(source: string) {
   if (source.includes('<html')) {
     const start = source.indexOf('<html');
     const end = source.indexOf('</html>');
-    return end > start ? source.slice(start, end + 7) : source.slice(start);
+    const document = end > start ? source.slice(start, end + 7) : source.slice(start);
+    const trailingJs = source.match(/={5,}\s*JS\s*([\s\S]*)$/i)?.[1]?.trim();
+    const normalizedDocument = document
+      .replaceAll('data:@file/javascript;base64', 'data:application/javascript;base64')
+      .replace(/<script\b[^>]*src=["']blob:[^"']+["'][^>]*>\s*<\/script>/gi, '');
+    return trailingJs ? `${normalizedDocument}<script>${trailingJs}</script>` : normalizedDocument;
   }
   const htmlMatch = source.match(/\bHTML\s*\n([\s\S]*?)\n={5,}\s*\nCSS\b/);
   const cssMatch = source.match(/\bCSS\s*\n([\s\S]*?)\n={5,}\s*\nJS\b/);
@@ -177,7 +183,7 @@ function PlaySurface() {
     </div>
     <div className="relative flex-1 p-2 sm:p-5">
       {!loaded && <div className="absolute inset-2 z-10 flex items-center justify-center bg-[#111] sm:inset-5"><div className="text-center"><div className="mx-auto mb-4 h-2 w-28 overflow-hidden bg-white/10"><div className="h-full w-1/2 bg-lime animate-pulse" /></div><p className="mono text-[10px] uppercase tracking-[.18em] text-white/45">Loading cartridge</p></div></div>}
-       <iframe title={`${game.name} playable game`} srcDoc={sourceToDocument(game.source ?? '')} className="game-iframe min-h-[calc(100dvh-96px)] border border-white/10" sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock" onLoad={() => setLoaded(true)} data-testid={`iframe-game-${game.slug}`} />
+       <iframe title={`${game.name} playable game`} {...(game.playUrl ? { src: game.playUrl } : { srcDoc: sourceToDocument(game.source ?? '') })} className="game-iframe min-h-[calc(100dvh-96px)] border border-white/10" allow="autoplay; fullscreen; gamepad" onLoad={() => setLoaded(true)} data-testid={`iframe-game-${game.slug}`} />
     </div>
   </div>;
 }
