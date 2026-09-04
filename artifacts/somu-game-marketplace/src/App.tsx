@@ -99,8 +99,21 @@ function Navigation() {
 
 function Hero() {
   return <header className="relative pb-24 pt-20 lg:pb-36 lg:pt-40 xl:pt-60" data-testid="hero">
+    <video
+      className="hero-video"
+      src={`${import.meta.env.BASE_URL}hero-background.mp4`}
+      poster={`${import.meta.env.BASE_URL}hero-background-poster.jpg`}
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="auto"
+      aria-hidden="true"
+      data-testid="hero-background-video"
+    />
+    <div className="hero-video-overlay" aria-hidden="true" />
     <div className="market-grid pointer-events-none absolute inset-x-0 top-0 h-[680px] opacity-50" />
-    <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
+    <div className="relative z-[2] mx-auto max-w-7xl px-6 lg:px-8">
       <div className="reveal max-w-3xl">
         <div className="flex w-fit items-center gap-3 border border-white/30 px-4 py-2 text-xs font-semibold text-white" data-testid="text-update"><span className="h-2 w-2 rounded-full bg-lime" /> New games just dropped <ChevronRight size={15} /></div>
         <h1 className="display mt-9 max-w-[620px] text-[3.65rem] font-bold uppercase leading-[.89] text-white sm:text-[6.7rem] lg:text-[5.5rem] xl:text-[7.3rem]" data-testid="text-hero-title">Play the<br /><span className="text-lime">arcade</span><br />again.</h1>
